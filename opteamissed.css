@@ -1,0 +1,6 @@
+@media (min-width: 768px) {
+  #cra-modal .modal-dialog {
+    width: auto;
+    margin: 10px;
+  }
+}

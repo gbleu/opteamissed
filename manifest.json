@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+
+  "name": "opteamissed",
+  "description": "Fix opteamis.com broken UX",
+  "version": "1.0.0",
+
+  "content_scripts": [
+    {
+      "matches": ["https://www.opteamis.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+
+  "web_accessible_resources": ["opteamissed.css", "opteamissed.js"]
+}
