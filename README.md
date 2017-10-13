@@ -9,13 +9,14 @@ Clone the repo and follow instructions [here](https://developer.chrome.com/exten
 ## features
 
 - replace selects by [selectize.js](https://selectize.github.io/selectize.js/)
+
+  ![selectize](./doc/selectize.gif "selectize")
+
 - wider modal
+
+  ![wider modal before](./doc/wider-modal-before.PNG "wider modal before")
+  ![wider modal after](./doc/wider-modal-after.PNG "wider modal after")
+
 - presets
 
-## TODO
-
-- presets: sync local storage
-- presets: add a remove button
-- presets: load multi-line
-- presets: update the select without refresh
-- presets: improve name selection
+  ![presets](./doc/presets.gif "presets")
