@@ -38,7 +38,18 @@ function savePreset() {
 
   const presets = loadPresets();
   presets.set(name, preset);
-  savePresets(presets);
+  return savePresets(presets);
+}
+
+function removePreset(name) {
+  const presets = loadPresets();
+  if (!presets.has(name)) {
+    console.warn(`Preset ${name} not found`);
+    return false;
+  }
+  const deleted = presets.delete(name);
+  const saved = savePresets(presets);
+  return deleted && saved;
 }
 
 function loadPreset(name) {
@@ -64,10 +75,16 @@ function loadPresets() {
 }
 
 function savePresets(presets = new Map()) {
-  localStorage.setItem(
-    'presets',
-    JSON.stringify(Array.from(presets.entries()))
-  );
+  try {
+    localStorage.setItem(
+      'presets',
+      JSON.stringify(Array.from(presets.entries()))
+    );
+    return true;
+  } catch (e) {
+    console.warn(e);
+    return false;
+  }
 }
 
 function injectPresetsControls(modalId) {
