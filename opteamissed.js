@@ -58,6 +58,13 @@ function loadPreset(name) {
     console.warn(`Preset ${name} not found`);
   }
   const preset = presets.get(name);
+  const lines = preset.length;
+  const max = 8;
+  let i = 1;
+  while ($('form#cra-form tbody tr').length - 2 < lines && i < max) {
+    $('form#cra-form #cra-add-button button').click();
+    i++;
+  }
   preset.forEach(function(presetLine, index) {
     const line = $('form#cra-form tbody tr').get(index + 1);
     for (var prop in presetLine) {
@@ -159,9 +166,58 @@ function injectPresetsControls(modalId) {
   });
 }
 
+function overloadCraAddForm() {
+  $('#cra-modal').off('click', '.cra-add-form');
+  $('#cra-modal').on('click', '.cra-add-form', function() {
+    // Clone line like before
+    const newRowIndex = craCloneRow();
+    // Add missing options to selects
+    $('#cra-form #cra-form-table > tbody > tr.cra-form-val')
+      .find('select')
+      .each(function() {
+        if ($(this)[0].selectize) {
+          const name = $(this).attr('name');
+          const options = $(this)[0].selectize.options;
+          const optionsArray = Object.keys(options).map(key => options[key]);
+          const newName = name.replace('form[0]', `form[${newRowIndex}]`);
+
+          $(`select[name="${newName}"]`)
+            .next('div')
+            .remove();
+          $(`select[name="${newName}"]`).removeClass('selectized');
+          $(`select[name="${newName}"]`).selectize({
+            placeholder: 'Choose one...',
+            options: optionsArray
+          });
+        }
+      });
+  });
+}
+
+function craCloneRow() {
+  if (view_mode == 0) return;
+  var str = 'form\\[0]';
+  var re = new RegExp(str, 'g');
+  var form_count = $('#cra-form-table > tbody > tr').length - 2;
+  var text =
+    '<tr>' +
+    $('.cra-form-val')
+      .eq(0)
+      .html()
+      .replace('cra-form-delete', 'cra-form-delete fa fa-times text-danger')
+      .replace(re, 'form[' + form_count + ']') +
+    '</tr>';
+  $(text)
+    .insertBefore('#cra-add-button')
+    .find('.cra-ia-id')
+    .remove();
+  return form_count;
+}
+
 $(document).ajaxComplete(function(event, xhr, settings) {
   selectize();
   if (settings.url === '../assets/srm_cra_calendar.php') {
     injectPresetsControls('cra-modal');
+    overloadCraAddForm();
   }
 });
