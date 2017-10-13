@@ -70,11 +70,12 @@ function savePresets(presets = new Map()) {
   );
 }
 
-function injectPresetsControls() {
+function injectPresetsControls(modalId) {
+  console.log('inject preset controls');
   const presets = loadPresets();
 
   const loadSelect = $('<select>')
-    .attr('id', 'loadPreset')
+    .attr('id', `loadPreset-${modalId}`)
     .attr('placeholder', 'Choose one...')
     .append(
       $('<option>')
@@ -90,7 +91,7 @@ function injectPresetsControls() {
   }
 
   const saveButton = $('<button>')
-    .attr('id', 'savePreset')
+    .attr('id', `savePreset-${modalId}`)
     .attr('type', 'button')
     .attr('class', 'btn')
     .attr('onclick', 'savePreset()')
@@ -106,7 +107,7 @@ function injectPresetsControls() {
     .attr('class', 'card-text')
     .text('Choose a preset in the list to replace the current selection.');
 
-  $('form#cra-form').before(
+  $(`div#${modalId} form#cra-form`).before(
     $('<div>')
       .attr('class', 'card')
       .append(
@@ -132,7 +133,7 @@ function injectPresetsControls() {
       )
   );
 
-  $('#loadPreset').selectize({
+  $(`select#loadPreset-${modalId}`).selectize({
     onChange: function(val) {
       if (val) {
         loadPreset(val);
@@ -141,7 +142,9 @@ function injectPresetsControls() {
   });
 }
 
-$(document).ajaxComplete(function() {
+$(document).ajaxComplete(function(event, xhr, settings) {
   selectize();
-  injectPresetsControls();
+  if (settings.url === '../assets/srm_cra_calendar.php') {
+    injectPresetsControls('cra-modal');
+  }
 });
