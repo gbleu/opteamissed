@@ -5,6 +5,12 @@
   "description": "Fix opteamis.com broken UX",
   "version": "1.0.0",
 
+  "browser_action": {},
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
   "content_scripts": [
     {
       "matches": ["https://www.opteamis.com/*"],
@@ -12,5 +18,7 @@
     }
   ],
 
-  "web_accessible_resources": ["opteamissed.css", "opteamissed.js"]
+  "web_accessible_resources": ["opteamissed.css", "opteamissed.js"],
+
+  "permissions": ["tabs"]
 }
