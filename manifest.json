@@ -5,20 +5,27 @@
   "description": "Fix opteamis.com broken UX",
   "version": "1.0.0",
 
-  "browser_action": {},
+  "page_action": {
+    "default_icon": {
+      "197": "images/opteamis.png",
+      "32": "images/opteamis-32x32.png",
+      "16": "images/opteamis-16x16.png"
+    }
+  },
 
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "persistent": false
   },
 
   "content_scripts": [
     {
-      "matches": ["https://www.opteamis.com/*"],
+      "matches": ["https://www.opteamis.com/cli/*"],
       "js": ["content.js"]
     }
   ],
 
   "web_accessible_resources": ["opteamissed.css", "opteamissed.js"],
 
-  "permissions": ["tabs"]
+  "permissions": ["activeTab", "declarativeContent"]
 }

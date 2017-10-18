@@ -32,25 +32,13 @@ function injectCss(metaLink) {
 }
 
 function inject() {
-  const disabled = JSON.parse(localStorage.getItem('disabled') || false);
-  console.log(`inject (${disabled ? 'disabled' : 'enabled'})`);
-  if (!disabled) {
-    styles.forEach(injectCss);
-    scripts.forEach(injectScript);
-  }
+  chrome.runtime.sendMessage({ action: 'IS_DISABLED' }, function(disabled) {
+    console.log(`opteamissed (${disabled ? 'disabled' : 'enabled'})`);
+    if (!disabled) {
+      styles.forEach(injectCss);
+      scripts.forEach(injectScript);
+    }
+  });
 }
-
-function toggle() {
-  const disabled = JSON.parse(localStorage.getItem('disabled') || false);
-  localStorage.setItem('disabled', JSON.stringify(!disabled));
-}
-
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  console.log(request);
-  if (request.action === 'TOGGLE') {
-    toggle();
-    sendResponse();
-  }
-});
 
 inject();
