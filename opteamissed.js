@@ -22,7 +22,7 @@ function selectize() {
     });
 }
 
-function savePreset() {
+function savePreset(modalId) {
   const preset = [];
   $('form#cra-form tbody tr:not(:first, :last)').each(function(i, line) {
     const presetLine = {};
@@ -38,7 +38,13 @@ function savePreset() {
 
   const presets = loadPresets();
   presets.set(name, preset);
-  return savePresets(presets);
+  const saved = savePresets(presets);
+
+  if (saved) {
+    $(`select#loadPreset-${modalId}`)
+      .selectize()[0]
+      .selectize.addOption({ value: name, text: name });
+  }
 }
 
 function removePreset(name) {
@@ -118,7 +124,7 @@ function injectPresetsControls(modalId) {
     .attr('id', `savePreset-${modalId}`)
     .attr('type', 'button')
     .attr('class', 'btn')
-    .attr('onclick', 'savePreset()')
+    .attr('onclick', `savePreset('${modalId}')`)
     .html('<i class="fa fa-bookmark" /> Save');
 
   const cardTitle = $('<h4>')
