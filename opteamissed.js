@@ -64,13 +64,26 @@ function loadPreset(name) {
     console.warn(`Preset ${name} not found`);
   }
   const preset = presets.get(name);
-  const lines = preset.length;
+  const presetLines = preset.length;
   const max = 8;
+  let craRows = $('form#cra-form tbody tr').length - 2;
   let i = 1;
-  while ($('form#cra-form tbody tr').length - 2 < lines && i < max) {
-    $('form#cra-form #cra-add-button button').click();
-    i++;
+  if (craRows < presetLines) {
+    while (craRows < presetLines && i < max) {
+      $('form#cra-form #cra-add-button button').click();
+      i++;
+      craRows = $('form#cra-form tbody tr').length - 2;
+    }
+  } else if (craRows > presetLines) {
+    while (craRows > presetLines && i < max) {
+      $('form#cra-form i.cra-form-delete')
+        .last()
+        .click();
+      i++;
+      craRows = $('form#cra-form tbody tr').length - 2;
+    }
   }
+
   preset.forEach(function(presetLine, index) {
     const line = $('form#cra-form tbody tr').get(index + 1);
     for (var prop in presetLine) {
